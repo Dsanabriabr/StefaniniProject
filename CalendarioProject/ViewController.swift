@@ -5,7 +5,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuView: UIViewX!
-    @IBOutlet weak var buttonCheckIn: UIButtonX!
+    @IBOutlet weak var visualEffectView: UIVisualEffectView!
+    @IBOutlet var searchMenuView: UIView!
     @IBOutlet weak var buttonMenu: FloatingActionButton!
     @IBOutlet weak var buttonAgendar: UIButtonX!
     @IBOutlet weak var buttonAct2: UIButtonX!
@@ -20,10 +21,12 @@ class ViewController: UIViewController {
     
     var tableData: [Model] = []
     var dayWeatherData: DayWeatherModel?
+    var effect:UIVisualEffect!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        effect = visualEffectView.effect
+        visualEffectView.effect = nil
         tableView.dataSource = self
         
         Data.getDayAndWeather{ (data) in
@@ -55,7 +58,40 @@ class ViewController: UIViewController {
         }
     }
     
+    func animateIn(){
+        self.view.addSubview(searchMenuView)
+        searchMenuView.center = self.view.center
+        searchMenuView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        UIView.animate(withDuration: 0.4){
+            self.tempView.isHidden = true
+            self.dateView.isHidden = true
+            self.buttonMenu.isHidden = true
+            self.tableView.isHidden = true
+            
+            self.navigationController?.navigationBar.isHidden = true
+            self.menuView.isHidden = true
+            self.visualEffectView.effect = self.effect
+      
+            self.searchMenuView.alpha = 1
+            self.searchMenuView.transform = CGAffineTransform.identity
+        }
+    }
     
+    func animateOut() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.searchMenuView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.searchMenuView.alpha = 0
+            self.visualEffectView.effect = nil
+        }) { (success:Bool) in
+            self.searchMenuView.removeFromSuperview()
+            self.tempView.isHidden = false
+            self.dateView.isHidden = false
+            self.menuView.isHidden = false
+            self.buttonMenu.isHidden = false
+            self.tableView.isHidden = false
+            self.navigationController?.navigationBar.isHidden = false
+        }
+    }
     @IBAction func menuTapped(_ sender: FloatingActionButton) {
         self.view.bringSubview(toFront: menuView)
         self.view.bringSubview(toFront: buttonMenu)
@@ -83,6 +119,12 @@ class ViewController: UIViewController {
         buttonAgendar.transform = CGAffineTransform(translationX: 0, y:15)
         buttonAct2.transform = CGAffineTransform(translationX: 11, y:11)
         buttonAct3.transform = CGAffineTransform(translationX: 15, y:0)
+    }
+    @IBAction func searchDone(_ sender: Any) {
+        animateOut()
+    }
+    @IBAction func searchMenu(_ sender: Any) {
+        animateIn()
     }
 }
 

@@ -19,7 +19,7 @@ class TableViewCell: UITableViewCell {
     func setup(model: Model) {
         titleLabel.text = model.title
         subtitleLabel.text = model.subTitle
-        cellImageView.image = model.image
+        cellImageView.image = #imageLiteral(resourceName: "Icon-ClearSky")
         data1Label.text = model.data1
         data2Label.text = model.data2
     }
