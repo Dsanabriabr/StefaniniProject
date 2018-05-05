@@ -10,6 +10,7 @@
 		E017DF51208DF00B000ECA39 /* bold_dot_digital-7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E017DF50208DF00B000ECA39 /* bold_dot_digital-7.ttf */; };
 		E017DF53208DF347000ECA39 /* Kenney Future Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E017DF52208DF347000ECA39 /* Kenney Future Square.ttf */; };
 		E01F5A03208CE3310021A56A /* DayWeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01F5A02208CE3310021A56A /* DayWeatherModel.swift */; };
+		E024A44B209E0EB900866346 /* SearchMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E024A44A209E0EB900866346 /* SearchMenuView.swift */; };
 		E03B2498208A0BCA007BE076 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E03B2497208A0BC9007BE076 /* Assets.xcassets */; };
 		E0782CB0208AC19700D7E02D /* UIButtonX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0782CAF208AC19700D7E02D /* UIButtonX.swift */; };
 		E0782CB2208B48C100D7E02D /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0782CB1208B48C100D7E02D /* FloatingActionButton.swift */; };
@@ -27,6 +28,7 @@
 		E017DF50208DF00B000ECA39 /* bold_dot_digital-7.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "bold_dot_digital-7.ttf"; sourceTree = "<group>"; };
 		E017DF52208DF347000ECA39 /* Kenney Future Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Future Square.ttf"; sourceTree = "<group>"; };
 		E01F5A02208CE3310021A56A /* DayWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayWeatherModel.swift; sourceTree = "<group>"; };
+		E024A44A209E0EB900866346 /* SearchMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMenuView.swift; sourceTree = "<group>"; };
 		E03B2497208A0BC9007BE076 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E0782CAF208AC19700D7E02D /* UIButtonX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonX.swift; sourceTree = "<group>"; };
 		E0782CB1208B48C100D7E02D /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				E0BA44AE2087BA1400D32BF8 /* LaunchScreen.storyboard */,
 				E0BA44A52087BA1400D32BF8 /* Main.storyboard */,
 				E0BA44A72087BA1400D32BF8 /* TableViewCell.swift */,
+				E024A44A209E0EB900866346 /* SearchMenuView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				E01F5A03208CE3310021A56A /* DayWeatherModel.swift in Sources */,
 				E0BA44A02087BA1400D32BF8 /* Data.swift in Sources */,
 				E0BA449E2087BA1400D32BF8 /* Model.swift in Sources */,
+				E024A44B209E0EB900866346 /* SearchMenuView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
