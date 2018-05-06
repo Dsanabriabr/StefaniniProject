@@ -1,7 +1,8 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuView: UIViewX!
@@ -11,6 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var buttonAgendar: UIButtonX!
     @IBOutlet weak var buttonAct2: UIButtonX!
     @IBOutlet weak var buttonAct3: UIButtonX!
+    @IBOutlet weak var SearchPickerMenu: UIPickerView!
     @IBOutlet weak var dateView: UIView!
     @IBOutlet weak var tempView: UIView!
     @IBOutlet weak var dayLabel: UILabel!
@@ -22,12 +24,29 @@ class ViewController: UIViewController {
     var tableData: [Model] = []
     var dayWeatherData: DayWeatherModel?
     var effect:UIVisualEffect!
+    var cities: [String] = []
+  //  var citiesX: [GroceryCitie] = []
+//    struct GroceryCitie: Codable {
+//        struct Coord: Codable{
+//            let lon: Double
+//            let lat: Double
+//        }
+//        var id: Int
+//        var coord: Coord
+//        var country: String
+//        var name: String
+//        var zoom: Int
+//
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         effect = visualEffectView.effect
         visualEffectView.effect = nil
         tableView.dataSource = self
+        SearchPickerMenu.delegate = self
+        SearchPickerMenu.dataSource = self
+        getCities()
         
         Data.getDayAndWeather{ (data) in
             if let data = data{
@@ -37,7 +56,6 @@ class ViewController: UIViewController {
                 self.cityLabel.text = data.city
                 self.weatherLabel.image = data.weatherIcon
                 }
-            
         }
         
         Data.getData { (data) in
@@ -55,6 +73,44 @@ class ViewController: UIViewController {
             self.tempView.transform = .identity
         }) { (sucess) in
             
+        }
+    }
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return cities.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return cities[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        cityLabel.text = cities[row]
+    }
+    
+    public func getCities(){
+        if let file = Bundle.main.path(forResource: "citylist.json", ofType: nil){
+            let url = URL(fileURLWithPath: file)
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                }
+                do {
+                    //Decode retrived data with JSONDecoder and assing type of Article object
+                    let jsonDecoder = JSONDecoder()
+                    let responseModel = try jsonDecoder.decode(CityList.self, from: data!)
+                    //Get back to the main queue
+                    DispatchQueue.main.async {
+                        for data in responseModel.data!{
+                            self.cities.append(data.name)
+                        }
+                        self.SearchPickerMenu.reloadAllComponents()
+                    }
+                    
+                } catch let jsonError {
+                    print(jsonError)
+                }
+                }.resume()
         }
     }
     

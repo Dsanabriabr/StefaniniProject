@@ -1,5 +1,5 @@
 //
-//  SearchMenuView.swift
+//  SearchMenuController.swift
 //  CalendarioProject
 //
 //  Created by Daniel Sanabria on 05/05/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchMenuView: UIView {
+class SearchMenuController: UIViewController {
     
     
 }
