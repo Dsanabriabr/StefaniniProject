@@ -25,19 +25,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var dayWeatherData: DayWeatherModel?
     var effect:UIVisualEffect!
     var cities: [String] = []
-  //  var citiesX: [GroceryCitie] = []
-//    struct GroceryCitie: Codable {
-//        struct Coord: Codable{
-//            let lon: Double
-//            let lat: Double
-//        }
-//        var id: Int
-//        var coord: Coord
-//        var country: String
-//        var name: String
-//        var zoom: Int
-//
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,6 +135,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             self.navigationController?.navigationBar.isHidden = false
         }
     }
+    func setupAnimatedControls(){
+        dateView.transform = CGAffineTransform(translationX: -dateView.frame.width, y:0)
+        tempView.transform = CGAffineTransform(translationX: tempView.frame.width, y:0)
+    }
+    func closeMenu(){
+        menuView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        buttonAgendar.transform = CGAffineTransform(translationX: 0, y:15)
+        buttonAct2.transform = CGAffineTransform(translationX: 11, y:11)
+        buttonAct3.transform = CGAffineTransform(translationX: 15, y:0)
+    }
     @IBAction func menuTapped(_ sender: FloatingActionButton) {
         self.view.bringSubview(toFront: menuView)
         self.view.bringSubview(toFront: buttonMenu)
@@ -166,16 +163,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
         })
     }
-    func setupAnimatedControls(){
-        dateView.transform = CGAffineTransform(translationX: -dateView.frame.width, y:0)
-        tempView.transform = CGAffineTransform(translationX: tempView.frame.width, y:0)
-    }
-    func closeMenu(){
-        menuView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        buttonAgendar.transform = CGAffineTransform(translationX: 0, y:15)
-        buttonAct2.transform = CGAffineTransform(translationX: 11, y:11)
-        buttonAct3.transform = CGAffineTransform(translationX: 15, y:0)
-    }
+    
     @IBAction func searchDone(_ sender: Any) {
         animateOut()
     }
