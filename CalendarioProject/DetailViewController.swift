@@ -84,21 +84,21 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
                 self.latCity.text = "lat: \(self.getDoubleStrWith4DecimalDigits(value: responseModel.coordcity.lat!))"
                 self.lonCity.text = "lon: \(self.getDoubleStrWith4DecimalDigits(value: responseModel.coordcity.lon!))"
                 self.humidCity.text = "Humidade: \(responseModel.main.humidity)"
-                    self.tempCity.text = "\(String(describing: responseModel.main.temp))º"
+                self.tempCity.text = "\(String(describing: responseModel.main.temp))º"
                 self.maxTemp.text = "max: \(responseModel.main.temp_max)º"
                 self.tempMin.text = "min: \(responseModel.main.temp_min)º"
                 self.location = CLLocationCoordinate2D(latitude: responseModel.coordcity.lat!, longitude: responseModel.coordcity.lon!)
                 self.windCity.text = "ventos: \(String(describing: responseModel.wind.speed))km/h"
                 self.textLbl.text = responseModel.weather[0].description
-                    self.weatherCity.image = self.getImage(weather: responseModel.weather[0].main!)
+                self.weatherCity.image = self.getImage(weather: responseModel.weather[0].main!)
                 }
             } catch let jsonError {
                 print(jsonError)
             }
             }.resume()
     }
-    //    func mapView(_ mapView: MKMapView, didUpdate userLocation: ){
-//        
-//    }
+        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation ){
+        
+    }
 }
 

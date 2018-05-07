@@ -1,5 +1,6 @@
 
 import UIKit
+import SQLite
 
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -24,9 +25,15 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var tableData: [Model] = []
     var dayWeatherData: DayWeatherModel?
     var effect: UIVisualEffect!
-    var cities: [String] = []
+    var citiesList: [String] = []
     var idList: [Int] = []
     var idSearch: Int?
+    var database: Connection!
+    let citiesTable = Table("cities")
+    let id = Expression<Int>("id")
+    let idCity = Expression<Int>("idCity")
+    let name = Expression<String>("name")
+    let weather = Expression<String>("weather")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +44,19 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         SearchPickerMenu.dataSource = self
         getCities()
         addNavBarImage()
+        createTableSQLite()
+        
+        //#SQL connection
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("cities").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.database = database
+        } catch{
+            print(error)
+        }
+        
+        
         Data.getDayAndWeather{ (data) in
             if let data = data{
                 self.dayLabel.text = data.dayName
@@ -46,7 +66,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 self.weatherLabel.image = data.weatherIcon
                 }
         }
-        
         Data.getData { (data) in
             self.tableData = data
             self.tableView.reloadData()
@@ -64,14 +83,58 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
         }
     }
+    public func createTableSQLite(){
+        let createTable = self.citiesTable.create{ (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.idCity)
+            table.column(self.name)
+            table.column(self.weather)
+        }
+        do {
+            try self.database.run(createTable)
+            print("Create Table")
+        } catch {
+            print(error)
+        }
+    }
+    public func insertCitySQLite(){
+        let insertCity = self.citiesTable.insert(self.idCity <- idCity, self.name <- name, self.weather <- weather)
+        do{
+            try self.database.run(insertCity)
+            print("cidade favoritos")
+        } catch {
+            print(error)
+        }
+    }
+    public func listCitiesSQLite(){
+        do {
+            let cities = try self.database.prepare(self.citiesTable)
+            for citie in cities {
+                print("id: \(citie[self.id]), name: \(citie[self.name]), weather: \(citie[self.weather])")
+            }
+        } catch {
+            print (error)
+        }
+    }
+    public func deleteCitySQLite(idCity: Int){
+        let city = self.citiesTable.filter(self.idCity == idCity)
+        let deleteCity = city.delete()
+        do{
+            try self.database.run(deleteCity)
+        } catch {
+            print(error)
+        }
+        
+    }
+    
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return cities.count
+        return citiesList.count
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return cities[row]
+        return citiesList[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         idSearch = row
@@ -107,7 +170,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                     //Get back to the main queue
                     DispatchQueue.main.async {
                         for data in responseModel.data!{
-                            self.cities.append(data.name)
+                            self.citiesList.append(data.name)
                             self.idList.append(data.id)
                         }
                         self.SearchPickerMenu.reloadAllComponents()
@@ -199,7 +262,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData.count
+        var total = 0
+        do {
+            let cities = try self.database.prepare(self.citiesTable)
+            for citie in cities {
+                total = total + 1
+            }
+        } catch {
+            print (error)
+        }
+        return total
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
