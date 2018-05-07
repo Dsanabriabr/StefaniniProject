@@ -23,8 +23,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     var tableData: [Model] = []
     var dayWeatherData: DayWeatherModel?
-    var effect:UIVisualEffect!
+    var effect: UIVisualEffect!
     var cities: [String] = []
+    var idList: [Int] = []
+    var idSearch: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +36,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         SearchPickerMenu.delegate = self
         SearchPickerMenu.dataSource = self
         getCities()
-        
+        addNavBarImage()
         Data.getDayAndWeather{ (data) in
             if let data = data{
                 self.dayLabel.text = data.dayName
@@ -72,9 +74,25 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         return cities[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        cityLabel.text = cities[row]
+        idSearch = row
     }
-    
+    func addNavBarImage(){
+        let navController = navigationController!
+        let image = #imageLiteral(resourceName: "icon-Logo")
+        let imageView = UIImageView(image: image)
+        let bannerWidth = navController.navigationBar.frame.size.width
+        let bannerHeight = navController.navigationBar.frame.size.height
+        let bannerX = bannerWidth / 2 - image.size.width / 2
+        let bannerY = bannerHeight / 2 - image.size.height / 2
+        imageView.frame = CGRect(x: bannerX, y: bannerY, width: bannerWidth, height: bannerHeight)
+        imageView.contentMode = .scaleAspectFit
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        navigationItem.titleView = imageView
+    }
     public func getCities(){
         if let file = Bundle.main.path(forResource: "citylist.json", ofType: nil){
             let url = URL(fileURLWithPath: file)
@@ -90,6 +108,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                     DispatchQueue.main.async {
                         for data in responseModel.data!{
                             self.cities.append(data.name)
+                            self.idList.append(data.id)
                         }
                         self.SearchPickerMenu.reloadAllComponents()
                     }
@@ -145,6 +164,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         buttonAct2.transform = CGAffineTransform(translationX: 11, y:11)
         buttonAct3.transform = CGAffineTransform(translationX: 15, y:0)
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let dtlview = segue.destination as! DetailViewController
+        dtlview.query = sender as! Int
+    }
     @IBAction func menuTapped(_ sender: FloatingActionButton) {
         self.view.bringSubview(toFront: menuView)
         self.view.bringSubview(toFront: buttonMenu)
@@ -166,6 +189,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     @IBAction func searchDone(_ sender: Any) {
         animateOut()
+        performSegue(withIdentifier: "makeTransition", sender: idList[idSearch!])
     }
     @IBAction func searchMenu(_ sender: Any) {
         animateIn()
@@ -182,5 +206,10 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell") as! TableViewCell
         cell.setup(model: tableData[indexPath.row])
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "makeTransition", sender: idList[indexPath.row])
+        
     }
 }

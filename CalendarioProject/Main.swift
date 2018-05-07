@@ -13,11 +13,11 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Main : Codable {
-	let temp : Int?
+	let temp : Double
 	let pressure : Int?
-	let humidity : Int?
-	let temp_min : Int?
-	let temp_max : Int?
+	let humidity : Int
+	let temp_min : Int
+	let temp_max : Int
 
 	enum CodingKeys: String, CodingKey {
 
@@ -30,11 +30,11 @@ struct Main : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		temp = try values.decodeIfPresent(Int.self, forKey: .temp)
+		temp = (try values.decodeIfPresent(Double.self, forKey: .temp))!
 		pressure = try values.decodeIfPresent(Int.self, forKey: .pressure)
-		humidity = try values.decodeIfPresent(Int.self, forKey: .humidity)
-		temp_min = try values.decodeIfPresent(Int.self, forKey: .temp_min)
-		temp_max = try values.decodeIfPresent(Int.self, forKey: .temp_max)
+		humidity = (try values.decodeIfPresent(Int.self, forKey: .humidity))!
+        temp_min = (try values.decodeIfPresent(Int.self, forKey: .temp_min))!
+        temp_max = (try values.decodeIfPresent(Int.self, forKey: .temp_max))!
 	}
 
 }

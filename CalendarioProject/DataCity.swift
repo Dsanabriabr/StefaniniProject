@@ -22,7 +22,7 @@ struct DataCity : Codable {
 	enum CodingKeys: String, CodingKey {
 
 		case id = "id"
-		case coord
+		case coord = "coord"
 		case country = "country"
 		case name = "name"
 		case zoom = "zoom"
@@ -31,7 +31,7 @@ struct DataCity : Codable {
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
         id = (try values.decodeIfPresent(Int.self, forKey: .id))!
-		coord = try Coord(from: decoder)
+		coord = (try values.decodeIfPresent(Coord.self, forKey: .coord))!
         country = (try values.decodeIfPresent(String.self, forKey: .country))!
         name = (try values.decodeIfPresent(String.self, forKey: .name))!
         zoom = (try values.decodeIfPresent(Int.self, forKey: .zoom))!

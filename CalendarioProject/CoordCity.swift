@@ -24,7 +24,7 @@ struct CoordCity : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		lon = try values.decodeIfPresent(Double.self, forKey: .lon)
+        lon = try values.decodeIfPresent(Double.self, forKey: .lon)
 		lat = try values.decodeIfPresent(Double.self, forKey: .lat)
 	}
 
