@@ -1,6 +1,6 @@
 
 import UIKit
-import SQLite
+// import SQLite
 
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -28,12 +28,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var citiesList: [String] = []
     var idList: [Int] = []
     var idSearch: Int?
-    var database: Connection!
-    let citiesTable = Table("cities")
-    let id = Expression<Int>("id")
-    let idCity = Expression<Int>("idCity")
-    let name = Expression<String>("name")
-    let weather = Expression<String>("weather")
+//    var database: Connection!
+//    let citiesTable = Table("cities")
+//    let id = Expression<Int>("id")
+//    let idCity = Expression<Int>("idCity")
+//    let name = Expression<String>("name")
+//    let weather = Expression<String>("weather")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,17 +44,17 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         SearchPickerMenu.dataSource = self
         getCities()
         addNavBarImage()
-        createTableSQLite()
+    // createTableSQLite()
         
         //#SQL connection
-        do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrl = documentDirectory.appendingPathComponent("cities").appendingPathExtension("sqlite3")
-            let database = try Connection(fileUrl.path)
-            self.database = database
-        } catch{
-            print(error)
-        }
+//        do {
+//            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//            let fileUrl = documentDirectory.appendingPathComponent("cities").appendingPathExtension("sqlite3")
+//            let database = try Connection(fileUrl.path)
+//            self.database = database
+//        } catch{
+//            print(error)
+//        }
         
         
         Data.getDayAndWeather{ (data) in
@@ -83,49 +83,49 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
         }
     }
-    public func createTableSQLite(){
-        let createTable = self.citiesTable.create{ (table) in
-            table.column(self.id, primaryKey: true)
-            table.column(self.idCity)
-            table.column(self.name)
-            table.column(self.weather)
-        }
-        do {
-            try self.database.run(createTable)
-            print("Create Table")
-        } catch {
-            print(error)
-        }
-    }
-    public func insertCitySQLite(){
-        let insertCity = self.citiesTable.insert(self.idCity <- idCity, self.name <- name, self.weather <- weather)
-        do{
-            try self.database.run(insertCity)
-            print("cidade favoritos")
-        } catch {
-            print(error)
-        }
-    }
-    public func listCitiesSQLite(){
-        do {
-            let cities = try self.database.prepare(self.citiesTable)
-            for citie in cities {
-                print("id: \(citie[self.id]), name: \(citie[self.name]), weather: \(citie[self.weather])")
-            }
-        } catch {
-            print (error)
-        }
-    }
-    public func deleteCitySQLite(idCity: Int){
-        let city = self.citiesTable.filter(self.idCity == idCity)
-        let deleteCity = city.delete()
-        do{
-            try self.database.run(deleteCity)
-        } catch {
-            print(error)
-        }
-        
-    }
+//    public func createTableSQLite(){
+//        let createTable = self.citiesTable.create{ (table) in
+//            table.column(self.id, primaryKey: true)
+//            table.column(self.idCity)
+//            table.column(self.name)
+//            table.column(self.weather)
+//        }
+//        do {
+//            try self.database.run(createTable)
+//            print("Create Table")
+//        } catch {
+//            print(error)
+//        }
+//    }
+//    public func insertCitySQLite(){
+//        let insertCity = self.citiesTable.insert(self.idCity <- idCity, self.name <- name, self.weather <- weather)
+//        do{
+//            try self.database.run(insertCity)
+//            print("cidade favoritos")
+//        } catch {
+//            print(error)
+//        }
+//    }
+//    public func listCitiesSQLite(){
+//        do {
+//            let cities = try self.database.prepare(self.citiesTable)
+//            for citie in cities {
+//                print("id: \(citie[self.id]), name: \(citie[self.name]), weather: \(citie[self.weather])")
+//            }
+//        } catch {
+//            print (error)
+//        }
+//    }
+//    public func deleteCitySQLite(idCity: Int){
+//        let city = self.citiesTable.filter(self.idCity == idCity)
+//        let deleteCity = city.delete()
+//        do{
+//            try self.database.run(deleteCity)
+//        } catch {
+//            print(error)
+//        }
+//
+//    }
     
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -263,14 +263,16 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var total = 0
-        do {
-            let cities = try self.database.prepare(self.citiesTable)
-            for citie in cities {
-                total = total + 1
-            }
-        } catch {
-            print (error)
-        }
+        total = tableData.count
+//        do {
+//            let cities = try self.database.prepare(self.citiesTable)
+//            for citie in cities {
+//                total = total + 1
+//            }
+//            total = citiesList.count
+//        } catch {
+//            print (error)
+//        }
         return total
     }
     

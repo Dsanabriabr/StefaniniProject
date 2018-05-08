@@ -39,7 +39,7 @@ class Data {
     
     static func getDayAndWeather(completion: @escaping (DayWeatherModel?) -> ()) {
         DispatchQueue.global(qos: .userInteractive).async {
-            let data = DayWeatherModel(dayName: "a", longDate: "22 de abril, 2018", temperature: "21º", city: "Belo Horizonte", weatherIcon: #imageLiteral(resourceName: "Icon-ClearSky"))
+            let data = DayWeatherModel(dayName: "min: 19º  max: 23º", longDate: "22 de abril, 2018", temperature: "21º", city: "Belo Horizonte", weatherIcon: #imageLiteral(resourceName: "Icon-ClearSky"))
             
             DispatchQueue.main.async {
                completion(data)

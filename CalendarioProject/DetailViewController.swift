@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import SQLite
 
 class DetailViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
@@ -25,6 +26,14 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
     var locationManager = CLLocationManager.init()
     var location = CLLocationCoordinate2D.init()
     var query: Int = 0
+    var weatherTxt: String = ""
+    var database: Connection!
+    let citiesTable = Table("cities")
+    let id = Expression<Int>("id")
+    let idCity = Expression<Int>("idCity")
+    let name = Expression<String>("name")
+    let weather = Expression<String>("weather")
+    
     override func viewDidLoad() {
         getCitie()
         let span = MKCoordinateSpan.init(latitudeDelta: 0.0075, longitudeDelta: 0.0075)
@@ -34,6 +43,16 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
         mapView.showsScale = true
         mapView.showsCompass = true
         mapView.delegate = self
+        
+        //#SQL connection
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrl = documentDirectory.appendingPathComponent("cities").appendingPathExtension("sqlite3")
+            let database = try Connection(fileUrl.path)
+            self.database = database
+        } catch{
+            print(error)
+        }
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -59,6 +78,13 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
         return String(format: "%.4f", value)
     }
     @IBAction func favoriteTapped(_ sender: Any) {
+        let insertCity = self.citiesTable.insert(self.idCity <- query, self.name <- nameCity.text!, self.weather <- weatherTxt)
+        do{
+            try self.database.run(insertCity)
+            print("cidade favoritada")
+        } catch {
+            print(error)
+        }
     }
     public func getCitie(){
         let url = URL(string: "http://api.openweathermap.org/data/2.5/weather?id=\(query)&appid=2bac87e0cb16557bff7d4ebcbaa89d2f&lang=pt&units=metric")!
@@ -91,6 +117,7 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
                 self.windCity.text = "ventos: \(String(describing: responseModel.wind.speed))km/h"
                 self.textLbl.text = responseModel.weather[0].description
                 self.weatherCity.image = self.getImage(weather: responseModel.weather[0].main!)
+                self.weatherTxt = responseModel.weather[0].main!
                 }
             } catch let jsonError {
                 print(jsonError)
