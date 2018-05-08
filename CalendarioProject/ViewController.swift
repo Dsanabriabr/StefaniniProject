@@ -21,6 +21,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBOutlet weak var weatherLabel: UIImageView!
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet var gestureRecognition: UITapGestureRecognizer!
     
     var tableData: [Model] = []
     var dayWeatherData: DayWeatherModel?
@@ -44,6 +45,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         SearchPickerMenu.dataSource = self
         getCities()
         addNavBarImage()
+        gestureRecognition.isEnabled = false
     // createTableSQLite()
         
         //#SQL connection
@@ -186,6 +188,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func animateIn(){
         self.view.addSubview(searchMenuView)
         searchMenuView.center = self.view.center
+        gestureRecognition.isEnabled = true
         searchMenuView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         UIView.animate(withDuration: 0.4){
             self.tempView.isHidden = true
@@ -214,6 +217,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             self.menuView.isHidden = false
             self.buttonMenu.isHidden = false
             self.tableView.isHidden = false
+            self.gestureRecognition.isEnabled = false
             self.navigationController?.navigationBar.isHidden = false
         }
     }
@@ -253,6 +257,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBAction func searchDone(_ sender: Any) {
         animateOut()
         performSegue(withIdentifier: "makeTransition", sender: idList[idSearch!])
+    }
+    @IBAction func backMainView(_ sender: Any) {
+        animateOut()
     }
     @IBAction func searchMenu(_ sender: Any) {
         animateIn()

@@ -285,6 +285,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="c70-x0-QMV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="WHU-gT-amb"/>
                             <constraint firstItem="c70-x0-QMV" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="h0T-91-FsJ"/>
@@ -297,6 +298,9 @@
                                 <exclude reference="ERW-yM-Vkn"/>
                             </mask>
                         </variation>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="S1v-yJ-PV2" appends="YES" id="PPV-Yq-Qfy"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="44Z-z4-UaE"/>
                     <connections>
@@ -309,6 +313,7 @@
                         <outlet property="dateLabel" destination="LUs-EM-Z2E" id="bUc-Tq-BqO"/>
                         <outlet property="dateView" destination="oNg-Vw-pFU" id="1aZ-sh-t3b"/>
                         <outlet property="dayLabel" destination="b8h-Ih-Ngj" id="8YY-UE-dqA"/>
+                        <outlet property="gestureRecognition" destination="S1v-yJ-PV2" id="2dF-9V-QSu"/>
                         <outlet property="menuView" destination="SXj-O7-akl" id="N4m-92-a2v"/>
                         <outlet property="searchMenuView" destination="kY2-PH-vNa" id="RrT-sm-adP"/>
                         <outlet property="tableView" destination="6aJ-45-chj" id="jaB-7w-YEL"/>
@@ -339,6 +344,11 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
+                <tapGestureRecognizer id="S1v-yJ-PV2">
+                    <connections>
+                        <action selector="backMainView:" destination="BYZ-38-t0r" id="uBf-qF-EH9"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="532.5" y="138.38028169014083"/>
         </scene>
