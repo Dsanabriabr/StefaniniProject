@@ -9,7 +9,7 @@ Este desafio foi entregue dentro de 48 horas
 	SWIFT 4.1
 
 _Arquitetura:
-MVC, por utilizar uma boa separação entre 
+MVC, por utilizar uma boa separação entre model view e controllers
 
 Ferramentas para acelerar o desenvolvimento
 _Design:
